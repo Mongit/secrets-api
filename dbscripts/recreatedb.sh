@@ -2,6 +2,7 @@
 
 DBFILE="secrets.db"
 SCRIPTFILE="secrets.sql"
+PROJ_DIR="SecretsAPI"
 
 if [ ! -f "./$SCRIPTFILE" ]; then
     echo "./$SCRIPTFILE does not exist."
@@ -10,15 +11,14 @@ fi
 
 remove_file_if_exists () {    
     if [ -f "$1" ]; then
-	rm $1
+	    rm $1
     fi
 }
 
-OLD="../SecretAPI/Db/$DBFILE"
+OLD="../$PROJ_DIR/Db/$DBFILE"
 remove_file_if_exists $OLD
 
-NEW="./$DBFILE"
-remove_file_if_exists $NEW
+remove_file_if_exists "./$DBFILE"
 
 
 cat $SCRIPTFILE | sqlite3 $DBFILE
