@@ -1,4 +1,5 @@
 using Ro.SQLite.Data;
+using SecretsAPI.Repos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services.AddTransient<IDbAsync>( svc =>
 {
     return new Database(connectionString);
 });
+
+builder.Services.AddScoped<IUsersRepo, UsersRepo>();
+builder.Services.AddScoped<ISecretsRepo, SecretsRepo>();
 
 var app = builder.Build();
 

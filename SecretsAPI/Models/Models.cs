@@ -20,6 +20,21 @@ public class Login
     }
     public string Username { get; set; }
     public string Password { get; set; }
+
+    public bool IsValid()
+    {
+        int maxLength = 30;
+        if(string.IsNullOrWhiteSpace(this.Username) || 
+        string.IsNullOrWhiteSpace(this.Password))
+        {
+            return false;
+        }
+        if(this.Username.Length > maxLength || this.Password.Length > maxLength)
+        {
+            return false;
+        }
+        return true;
+    }
 }
 
 public class User
