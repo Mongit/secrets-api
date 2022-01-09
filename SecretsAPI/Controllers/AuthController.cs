@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SecretsAPI.Controllers;
 
@@ -24,6 +25,37 @@ public class AuthController : ControllerBase
         _logger = logger;
         _usersRepo = usersRepo;
         _configuration = configuration;
+    }
+    
+    [NonAction]
+	private Guid GetUserId()
+    {
+        var identity = HttpContext.User.Identity as ClaimsIdentity;	
+        if (identity == null) return Guid.Empty;
+
+        var claim = identity.FindFirst("Id");
+        if (claim == null) return Guid.Empty;	
+
+        return Guid.Parse(claim.Value);
+    }
+
+    [HttpPost("ChngPwd"), Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ChngPwd(ChangePassword m)
+    {
+		if (m.IsValid() == false)
+		{
+			return BadRequest("Not equal.");
+		}
+
+		try {
+			await _usersRepo.ChangePassword(GetUserId(), m);
+		}
+		catch {
+			return BadRequest("something went wrong.");
+		}
+		return Ok();
     }
 
     [HttpPost("Register")]

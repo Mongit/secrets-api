@@ -9,6 +9,20 @@ public class ChangePassword
     }
     public string Password { get; set; }
     public string PasswordConfirm { get; set; }
+    
+    public bool IsValid()
+    {
+        if (string.IsNullOrWhiteSpace(this.Password) ||
+            string.IsNullOrWhiteSpace(this.PasswordConfirm))
+            return false;
+
+        if (this.Password != this.PasswordConfirm)
+            return false;
+
+        return true;
+    }
+
+
 }
 
 public class Login
