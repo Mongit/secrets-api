@@ -28,6 +28,6 @@ fi
 podman build -f $CONTAINER_FILE -t $IMAGE_NAME
 
 ## Run
-podman run -e JWT_TOKEN -v $DB_PATH:$CONT_DB_PATH -d --name $CONTAINER_NAME -p $PORT $IMAGE_NAME
+podman run -e JWT_TOKEN_KEY -v $DB_PATH:$CONT_DB_PATH -d --name $CONTAINER_NAME -p $PORT $IMAGE_NAME
 
 podman ps
