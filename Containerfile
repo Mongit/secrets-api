@@ -2,14 +2,14 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 # copy csproj and restore as distinct layers
-COPY SecretAPI.sln .
+COPY SecretsAPI.sln .
 COPY nuget.config .
-COPY SecretAPI/*.csproj ./SecretAPI/
+COPY SecretsAPI/*.csproj ./SecretsAPI/
 RUN dotnet restore
 
 # copy everything else and build app
 COPY . ./
-WORKDIR /app/SecretAPI
+WORKDIR /app/SecretsAPI
 RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
@@ -25,5 +25,5 @@ RUN apt-get update && apt-get -y upgrade \
     && apt-get install -y --allow-unauthenticated \
     sqlite3 
 
-COPY --from=build /app/SecretAPI/out ./
-ENTRYPOINT ["dotnet", "SecretAPI.dll", "--urls", "http://0.0.0.0:5000;http://0.0.0.0:5001"]
+COPY --from=build /app/SecretsAPI/out ./
+ENTRYPOINT ["dotnet", "SecretsAPI.dll", "--urls", "http://0.0.0.0:5000;http://0.0.0.0:5001"]
